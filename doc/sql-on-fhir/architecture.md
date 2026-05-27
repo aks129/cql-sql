@@ -100,7 +100,7 @@ CQL Studio's broader IDE is signal-based (see `IdeStateService`, `SettingsServic
 The same `ElmToSqlTranspiler` output runs unchanged against:
 
 - **PGlite** (in-browser, today).
-- **HAPI FHIR JPA on Postgres** (via Preston's Issue #20) — the `scripts/hapi-fhir-sql-on-fhir/` views project the HAPI normalized schema into the same flat-view shape, so the transpiled SQL is portable.
+- **HAPI FHIR JPA on Postgres** (via Preston's Issue #20) — the `scripts/hapi-fhir-sql-on-fhir/` views project the HAPI normalized schema into the same flat-view shape, so the transpiled SQL is portable. Views are installed **on demand from the UI** (the team's April 2026 decision), not at server boot.
 - **Any other SQL-on-FHIR-compliant runtime** with a Postgres-compatible dialect.
 
 The pipeline service has a `canSaveMeasureReport()` toggle today; a parallel `useServerSqlExecutor()` toggle is a small follow-up once Preston's `/$execute-sql` endpoint lands.

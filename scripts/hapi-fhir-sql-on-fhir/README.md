@@ -1,8 +1,8 @@
 # HAPI FHIR JPA — SQL-on-FHIR Views
 
-SQL boot scripts that create SQL-on-FHIR flat views over the HAPI FHIR JPA PostgreSQL backing database. These views satisfy the table contracts expected by `@cqframework/elm-to-sql`.
+Reference SQL that creates SQL-on-FHIR flat views over the HAPI FHIR JPA PostgreSQL backing database. These views satisfy the table contracts expected by the in-app `elm-to-sql` library.
 
-Implements [Issue #21](https://github.com/cqframework/cql-studio/issues/21). Preston's server boot code ([Issue #20](https://github.com/cqframework/cql-studio/issues/20)) calls `install.sql` automatically on startup.
+Implements [Issue #21](https://github.com/cqframework/cql-studio/issues/21). **These are not boot scripts.** Per the team's April 2026 decision ([Issue #20](https://github.com/cqframework/cql-studio/issues/20)), CQL Studio Server does **not** install views at startup — instead the views are generated and applied **on demand from the UI** when a user opts to run SQL against a live server. This file is the canonical DDL that the on-demand installer applies; it is also directly runnable by hand (below) for local setup and testing.
 
 ## Requirements
 
@@ -15,11 +15,11 @@ Implements [Issue #21](https://github.com/cqframework/cql-studio/issues/21). Pre
 ## Quick start
 
 ```bash
-# Run once, or on every boot — safe to re-run
+# Apply by hand for local setup/testing — idempotent, safe to re-run
 psql "$DATABASE_URL" -f install.sql
 ```
 
-`DATABASE_URL` should point to the PostgreSQL database underlying your HAPI FHIR JPA server (same DB that HAPI uses). For the CQL Studio bundle, this is set via `CQL_STUDIO_DB_URL`.
+`DATABASE_URL` should point to the PostgreSQL database underlying your HAPI FHIR JPA server (same DB that HAPI uses). In the on-demand model, CQL Studio Server applies this same DDL through its own DB connection when the user triggers an install from the UI — there is no startup hook.
 
 ## Views created
 
@@ -95,7 +95,7 @@ ORDER BY code_count DESC;
 
 When this script changes between versions, re-run `install.sql`. `CREATE OR REPLACE VIEW` will update the view definition in place without dropping it. The `cql_studio_view_version` table records the new version and timestamp.
 
-For breaking column changes (future), individual view files will increment their version constant and the boot code will detect the old version and re-run the affected file.
+For breaking column changes (future), individual view files increment their version constant and the on-demand installer detects the old version and re-runs the affected file.
 
 ## HAPI schema compatibility
 

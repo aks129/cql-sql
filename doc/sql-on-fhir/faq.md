@@ -145,7 +145,7 @@ psql "$DATABASE_URL" -f scripts/hapi-fhir-sql-on-fhir/install.sql
 
 `DATABASE_URL` points at the Postgres database backing your HAPI FHIR JPA server. The script is idempotent (`CREATE OR REPLACE VIEW`) and transactional.
 
-Once views exist, the same SQL the in-browser demo emits can run against the HAPI database — that's the bridge to production. Preston's Issue #20 is the missing piece on the server-side wiring.
+Once views exist, the same SQL the in-browser demo emits can run against the HAPI database — that's the bridge to production. Per the team's April 2026 decision (Issue #20), CQL Studio Server will apply this DDL **on demand from the UI** rather than at boot; running it by hand as above is the way to set up a local/test database today.
 
 ## Q: I want to contribute. Where do I start?
 

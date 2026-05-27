@@ -49,7 +49,7 @@ The demo works against a hand-crafted bundle in PGlite. The connectathon demo al
 
 - ⏳ Run `scripts/hapi-fhir-sql-on-fhir/test/run_tests.sql` against a real HAPI FHIR JPA instance.
 - ⏳ Run the CMS125 demo SQL against a HAPI instance seeded with the synthetic patient bundle.
-- 🤝 **Issue #20**: Preston — wire `CQL_STUDIO_DB_URL` in CQL Studio Server, invoke `install.sql` on boot, expose a `/$execute-sql` operation that the pipeline service can POST SQL to.
+- 🤝 **Issue #20**: Preston — per the team's April decision, views are **not** installed at server boot. Instead they are generated and applied **on demand from the UI** (the user opts in; CQL Studio Server applies the view DDL via its DB connection, then runs the query). No boot-time coupling and no `install.sql` invocation on startup. The SQL DDL in `scripts/hapi-fhir-sql-on-fhir/` is the reference the on-demand installer applies.
 - 🤝 **Issue #23**: Preston — embed the `SqlOnFhirComponent` (or a thin wrapper) into the IDE alongside the existing CQL editor as a "SQL view" pane.
 
 ### ⏳ M4 — Broader measure coverage
@@ -98,7 +98,7 @@ PGlite runs in the browser's WebAssembly sandbox. There is no exposed network su
 
 ### Compatibility with existing CQL infrastructure
 
-This effort **adds** an execution path, it does not remove the existing CQL Tests Runner integration (`/runner`) or the AI-assisted IDE workflows. Sites that have invested in the standard ELM interpreters keep using them; sites that want SQL-on-FHIR as their execution layer can now use that too.
+This effort **adds** an execution path; it does not remove the existing CQL Tests Runner integration (`/runner`) or any other IDE workflow. Sites that have invested in the standard ELM interpreters keep using them; sites that want SQL-on-FHIR as their execution layer can now use that too.
 
 ## Tracking
 
